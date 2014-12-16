@@ -18,33 +18,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
+
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.tableView2.allowsMultipleSelectionDuringEditing = YES;
     
-    // populate the data array with some example objects
     dataArray = [NSMutableArray new];
     dataArray2 = [NSMutableArray new];
-    NSString *itemFormatString = NSLocalizedString(@"Item %d", @"Format string for item");
-    for (unsigned int itemNumber = 1; itemNumber <= 12; itemNumber++)
-    {
-        NSString *itemName = [NSString stringWithFormat:itemFormatString, itemNumber];
-        [dataArray addObject:itemName];
-    }
     
-    [dataArray2 addObject:@"atat"];
-    
-    // make our view consistent
-    
+    [dataArray addObject:@"Бананы"];
+    [dataArray addObject:@"Огурцы"];
+    [dataArray addObject:@"Помидоры"];
+    [dataArray addObject:@"Яблоки"];
+    [dataArray addObject:@"Мандарины"];
+    [dataArray2 addObject:@"Помидоры"];
     
     [self.tableView setEditing:YES animated:YES];
     [self.tableView2 setEditing:YES animated:YES];
-
-    
 }
-
-#pragma mark - UITableViewDelegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -53,12 +43,10 @@
     } else {
         return dataArray2.count;
     }
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Configure a cell to show the corresponding string from the array.
     if (tableView == self.tableView) {
         static NSString *kCellID = @"cellID";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellID];
@@ -72,63 +60,9 @@
         cell.textLabel.text = [dataArray2 objectAtIndex:indexPath.row];
         
         return cell;
-
     }
     }
 
-
-
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    // The user tapped one of the OK/Cancel buttons.
-   // Delete what the user selected.
-        NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
-        BOOL deleteSpecificRows = selectedRows.count > 0;
-        if (deleteSpecificRows)
-        {
-            // Build an NSIndexSet of all the objects to delete, so they can all be removed at once.
-            NSMutableIndexSet *indicesOfItemsToDelete = [NSMutableIndexSet new];
-            for (NSIndexPath *selectionIndex in selectedRows)
-            {
-                [indicesOfItemsToDelete addIndex:selectionIndex.row];
-            }
-            // Delete the objects from our data model.
-            [dataArray removeObjectsAtIndexes:indicesOfItemsToDelete];
-            
-            // Tell the tableView that we deleted the objects
-            [self.tableView deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-        
-        // Exit editing mode after the deletion.
-}
-
-
-
-- (IBAction)addAction:(id)sender
-{
-        // Tell the tableView we're going to add (or remove) items.
-        [self.tableView beginUpdates];
-    
-        // Add an item to the array.
-        [dataArray addObject:@"New Item"];
-    
-        // Tell the tableView about the item that was added.
-        NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(dataArray.count - 1) inSection:0];
-        [self.tableView insertRowsAtIndexPaths:@[indexPathOfNewItem]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-    
-        // Tell the tableView we have finished adding or removing items.
-        [self.tableView endUpdates];
-    
-        // Scroll the tableView so the new item is visible
-        [self.tableView scrollToRowAtIndexPath:indexPathOfNewItem
-                              atScrollPosition:UITableViewScrollPositionBottom
-                                      animated:YES];
-    
-        // Update the buttons if we need to.
-     //   [self updateButtonsToMatchTableState];
-}
 
 - (IBAction)down:(id)sender {
     NSMutableArray *ss = [[NSMutableArray alloc] init];
@@ -168,7 +102,10 @@
             [self.tableView2 scrollToRowAtIndexPath:indexPathOfNewItem
                                   atScrollPosition:UITableViewScrollPositionBottom
                                           animated:YES];
-
+            self.tableView.allowsMultipleSelectionDuringEditing = NO;
+            self.tableView2.allowsMultipleSelectionDuringEditing = NO;
+            self.tableView.allowsMultipleSelectionDuringEditing = YES;
+            self.tableView2.allowsMultipleSelectionDuringEditing = YES;
             
         }
     
@@ -216,16 +153,11 @@
             [self.tableView scrollToRowAtIndexPath:indexPathOfNewItem
                                    atScrollPosition:UITableViewScrollPositionBottom
                                            animated:YES];
-            
-            
+            self.tableView.allowsMultipleSelectionDuringEditing = NO;
+            self.tableView2.allowsMultipleSelectionDuringEditing = NO;
+            self.tableView.allowsMultipleSelectionDuringEditing = YES;
+            self.tableView2.allowsMultipleSelectionDuringEditing = YES;
         }
-        
     }
-
-    
 }
-
-
-
-
 @end
