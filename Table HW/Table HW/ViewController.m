@@ -65,8 +65,20 @@
     }
     
     // Adding deleted items to the Top
-    [self.topDataArr addObjectsFromArray:tempDataArr];
-    [self.topTableView reloadData];
+    NSUInteger itemsCount = tempDataArr.count;
+    for (int i=0; i < itemsCount; i++)
+    {
+        [self.topTableView beginUpdates];
+        [self.topDataArr addObject:[tempDataArr objectAtIndex:i]];
+        NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(self.topDataArr.count - 1) inSection:0];
+        [self.topTableView insertRowsAtIndexPaths:@[indexPathOfNewItem]
+                                    withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.topTableView endUpdates];
+        [self.topTableView scrollToRowAtIndexPath:indexPathOfNewItem
+                                    atScrollPosition:UITableViewScrollPositionBottom
+                                            animated:YES];
+        [self.topTableView deselectRowAtIndexPath:[self.topTableView indexPathForSelectedRow] animated:YES];
+    }
 }
 - (IBAction)downButtonPressed:(id)sender {
     NSMutableArray *tempDataArr = [NSMutableArray new];
@@ -84,8 +96,20 @@
     }
     
     // Adding deleted items to the Bottom
-    [self.bottomDataArr addObjectsFromArray:tempDataArr];
-    [self.bottomTableView reloadData];
+    NSUInteger itemsCount = tempDataArr.count;
+    for (int i=0; i < itemsCount; i++)
+    {
+        [self.bottomTableView beginUpdates];
+        [self.bottomDataArr addObject:[tempDataArr objectAtIndex:i]];
+        NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(self.bottomDataArr.count - 1) inSection:0];
+        [self.bottomTableView insertRowsAtIndexPaths:@[indexPathOfNewItem]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.bottomTableView endUpdates];
+        [self.bottomTableView scrollToRowAtIndexPath:indexPathOfNewItem
+                              atScrollPosition:UITableViewScrollPositionBottom
+                                      animated:YES];
+        [self.bottomTableView deselectRowAtIndexPath:[self.bottomTableView indexPathForSelectedRow] animated:YES];
+    }
 }
 
 @end
