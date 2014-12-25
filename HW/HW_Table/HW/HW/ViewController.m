@@ -30,7 +30,7 @@
     [dataArray addObject:@"Помидоры"];
     [dataArray addObject:@"Яблоки"];
     [dataArray addObject:@"Мандарины"];
-    [dataArray2 addObject:@"Помидоры"];
+    
     
     [self.tableView setEditing:YES animated:YES];
     [self.tableView2 setEditing:YES animated:YES];
