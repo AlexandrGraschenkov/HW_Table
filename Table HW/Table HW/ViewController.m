@@ -50,66 +50,76 @@
 }
 
 - (IBAction)upButtonPressed:(id)sender {
-    NSMutableArray *tempDataArr = [NSMutableArray new];
-
-    // Deleting items from Bottom
+    
+    NSMutableArray *temdDataArr = [NSMutableArray new];
     NSArray *selectedRowsFromBottom = [self.bottomTableView indexPathsForSelectedRows];
-    if (selectedRowsFromBottom.count > 0) {
-        
-        for (NSIndexPath *selectionIndex in selectedRowsFromBottom){
-            NSIndexPath *tempIndexPath = [self.bottomDataArr objectAtIndex:selectionIndex.row];
-            [tempDataArr addObject:tempIndexPath];
-            [self.bottomDataArr removeObjectAtIndex:selectionIndex.row];
+    if (selectedRowsFromBottom.count > 0)
+    {
+        NSMutableIndexSet *indexesToDelete = [NSMutableIndexSet new];
+        for (NSIndexPath *path in selectedRowsFromBottom)
+        {
+            [indexesToDelete addIndex:path.row];
+            [temdDataArr addObject:[self.bottomDataArr objectAtIndex:path.row]];
         }
+        [self.bottomDataArr removeObjectsAtIndexes:indexesToDelete];
         [self.bottomTableView deleteRowsAtIndexPaths:selectedRowsFromBottom withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    
-    // Adding deleted items to the Top
-    NSUInteger itemsCount = tempDataArr.count;
-    for (int i=0; i < itemsCount; i++)
-    {
-        [self.topTableView beginUpdates];
-        [self.topDataArr addObject:[tempDataArr objectAtIndex:i]];
-        NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(self.topDataArr.count - 1) inSection:0];
-        [self.topTableView insertRowsAtIndexPaths:@[indexPathOfNewItem]
-                                    withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.topTableView endUpdates];
-        [self.topTableView scrollToRowAtIndexPath:indexPathOfNewItem
-                                    atScrollPosition:UITableViewScrollPositionBottom
-                                            animated:YES];
-        [self.topTableView deselectRowAtIndexPath:[self.topTableView indexPathForSelectedRow] animated:YES];
-    }
-}
-- (IBAction)downButtonPressed:(id)sender {
-    NSMutableArray *tempDataArr = [NSMutableArray new];
-    
-    // Deleting items from Top
-    NSArray *selectedRowsFromTop = [self.topTableView indexPathsForSelectedRows];
-    if (selectedRowsFromTop.count > 0) {
         
-        for (NSIndexPath *selectionIndex in selectedRowsFromTop){
-            NSIndexPath *tempIndexPath = [self.topDataArr objectAtIndex:selectionIndex.row];
-            [tempDataArr addObject:tempIndexPath];
-            [self.topDataArr removeObjectAtIndex:selectionIndex.row];
+        for (int i=0; i < temdDataArr.count; i++) {
+            [self.topTableView beginUpdates];
+            [self.topDataArr addObject:temdDataArr[i]];
+            
+            NSIndexPath *itemIndexPath = [NSIndexPath indexPathForRow:(self.topDataArr.count - 1) inSection:0];
+            [self.topTableView insertRowsAtIndexPaths:@[itemIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.topTableView endUpdates];
+            
+            [self.topTableView scrollToRowAtIndexPath:itemIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            
+            self.topTableView.allowsMultipleSelectionDuringEditing = NO;
+            self.bottomTableView.allowsMultipleSelectionDuringEditing = NO;
+            self.topTableView.allowsMultipleSelectionDuringEditing = YES;
+            self.bottomTableView.allowsMultipleSelectionDuringEditing = YES;
+            
+            self.topTableView.allowsMultipleSelection = NO;
+            self.topTableView.allowsMultipleSelection = YES;
         }
-        [self.topTableView deleteRowsAtIndexPaths:selectedRowsFromTop withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
-    // Adding deleted items to the Bottom
-    NSUInteger itemsCount = tempDataArr.count;
-    for (int i=0; i < itemsCount; i++)
-    {
-        [self.bottomTableView beginUpdates];
-        [self.bottomDataArr addObject:[tempDataArr objectAtIndex:i]];
-        NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(self.bottomDataArr.count - 1) inSection:0];
-        [self.bottomTableView insertRowsAtIndexPaths:@[indexPathOfNewItem]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.bottomTableView endUpdates];
-        [self.bottomTableView scrollToRowAtIndexPath:indexPathOfNewItem
-                              atScrollPosition:UITableViewScrollPositionBottom
-                                      animated:YES];
-        [self.bottomTableView deselectRowAtIndexPath:[self.bottomTableView indexPathForSelectedRow] animated:YES];
-    }
 }
 
+- (IBAction)downButtonPressed:(id)sender {
+    
+    NSMutableArray *temdDataArr = [NSMutableArray new];
+    NSArray *selectedRowsFromTop = [self.topTableView indexPathsForSelectedRows];
+    if (selectedRowsFromTop.count > 0)
+    {
+        NSMutableIndexSet *indexesToDelete = [NSMutableIndexSet new];
+        for (NSIndexPath *path in selectedRowsFromTop)
+        {
+            [indexesToDelete addIndex:path.row];
+            [temdDataArr addObject:[self.topDataArr objectAtIndex:path.row]];
+        }
+        [self.topDataArr removeObjectsAtIndexes:indexesToDelete];
+        [self.topTableView deleteRowsAtIndexPaths:selectedRowsFromTop withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        for (int i=0; i < temdDataArr.count; i++) {
+            [self.bottomTableView beginUpdates];
+            [self.bottomDataArr addObject:temdDataArr[i]];
+            
+            NSIndexPath *itemIndexPath = [NSIndexPath indexPathForRow:(self.bottomDataArr.count - 1) inSection:0];
+            [self.bottomTableView insertRowsAtIndexPaths:@[itemIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.bottomTableView endUpdates];
+            
+            [self.bottomTableView scrollToRowAtIndexPath:itemIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            
+            self.topTableView.allowsMultipleSelectionDuringEditing = NO;
+            self.bottomTableView.allowsMultipleSelectionDuringEditing = NO;
+            self.topTableView.allowsMultipleSelectionDuringEditing = YES;
+            self.bottomTableView.allowsMultipleSelectionDuringEditing = YES;
+            
+            self.bottomTableView.allowsMultipleSelection = NO;
+            self.bottomTableView.allowsMultipleSelection = YES;
+        }
+    }
+    
+}
 @end
