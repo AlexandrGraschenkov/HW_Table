@@ -57,48 +57,41 @@
     }
 
 - (IBAction)PastUp:(id)sender {
-    
-
     NSArray *selectedRows = [self.tableView2 indexPathsForSelectedRows];
     BOOL deleteSpecificRows = selectedRows.count > 0;
     if (deleteSpecificRows)
     {
         
         for (NSIndexPath *rowId in selectedRows)
-        {
-         
-        
-            [tableOne addObject:tableTwo[rowId.row]];
-            [tableTwo removeObjectAtIndex:rowId.row];
-            NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(tableOne.count - 1) inSection:0];
-            [self.tableView insertRowsAtIndexPaths:@[indexPathOfNewItem]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-        
-        [self.tableView2 deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationAutomatic];
+        {[tableOne addObject:tableTwo[rowId.row]];
+                NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(tableOne.count - 1) inSection:0];
+                [self.tableView insertRowsAtIndexPaths:@[indexPathOfNewItem]
+                                       withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
+            for(NSString *tableOneRow in tableOne){
+                [tableTwo removeObject: tableOneRow];
+            }
+            
+            [self.tableView2 deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
 - (IBAction)PastDown:(id)sender {
-    
-    
-    
-    
     NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
     BOOL deleteSpecificRows = selectedRows.count > 0;
     if (deleteSpecificRows)
     {
-        
-        for (NSIndexPath *rowId in selectedRows)
-        {
-            
-            
-            [tableTwo addObject:tableOne[rowId.row]];
-            [tableOne removeObjectAtIndex:rowId.row];
-            NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(tableTwo.count - 1) inSection:0];
+    for (NSIndexPath *rowId in selectedRows)
+        {[tableTwo addObject:tableOne[rowId.row]];
+         NSIndexPath *indexPathOfNewItem = [NSIndexPath indexPathForRow:(tableTwo.count - 1) inSection:0];
             [self.tableView2 insertRowsAtIndexPaths:@[indexPathOfNewItem]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                                   withRowAnimation:UITableViewRowAnimationAutomatic];
         }
+        
+        for(NSString *tableTwoRow in tableTwo){
+            [tableOne removeObject: tableTwoRow];
+         }
         
         [self.tableView deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationAutomatic];
     }
